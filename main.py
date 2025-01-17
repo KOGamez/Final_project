@@ -19,19 +19,34 @@ moving_left = False
 player_location = [50,50]
 Player_y_momentum = 0
 
+player_rect = pygame.Rect(player_location[0],player_location[1],player_image.get_width(),player_image.get_height())
+test_rect = (100,100,100,50)
+
 while True:  ##start the main game loop
     screen.fill((146,244,255))
     screen.blit(player_image,player_location)
 
 
     #brackets call xyval change
-    if player_location_
+    if player_location[1] > WINDOW_SIZE[1]-player_image.get_height():
+        Player_y_momentum = -Player_y_momentum
+    else:
+        Player_y_momentum += 0.2
+    player_location[1] += Player_y_momentum
 
     #brackets call xval change
     if moving_right == True:
         player_location[0] += 4
     if moving_left == True:
         player_location[0] -= 4
+    
+    player_rect.x = player_location[0]
+    player_rect.y = player_location[0]
+
+    if player_rect.colliderect(test_rect):
+        pygame.draw.rect(screen,(255,0,0),test_rect)
+    else:
+        pygame.draw.rect(screen,(0,0,0),test_rect)
 
     ##process events in the event for any usser
     for event in pygame.event.get():
