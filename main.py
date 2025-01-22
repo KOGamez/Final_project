@@ -7,31 +7,31 @@ pygame.init() # initiate pygame
 
 pygame.display.set_caption('Pygame Window') # set the window name
 
-WINDOW_SIZE = (1600,800) # set up window size
+WINDOW_SIZE = (800,400) # set up window size
 
 screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate screen
 
 display = pygame.Surface((600, 200)) # create a smaller surface for scaling
 
 # Load player image
-player_image = pygame.image.load('Player_standing-1.png (3).png').convert()
-player_image.set_colorkey((255, 255, 255)) # make white transparent
+player_image = pygame.image.load('Player_standing-1.png (3).png')
+
 
 # Load environment assets
 grass_image = pygame.image.load('gras version 1-1.png (1).png') # load grass texture
 TILE_SIZE = grass_image.get_width() # get tile size from grass image width
 
 dirt_image = pygame.image.load('dirt_texture versio1-1.png (1).png') # load dirt texture
-
+Wheat_image = pygame.image.load('Wheat.png') # load dirt texture
 ### Tile map for game world layout
 game_map = [
     ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
     ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
     ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
     ['0','0','0','0','0','0','0','2','2','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2','2','2','2','0','0','0','0','0','0','0'],
     ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-    ['2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2'],
+    ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+    ['2','2','0','0','0','0','0','0','0','0','0','0','3','0','0','0','3','2','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2'],
     ['1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1','1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1'],
     ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
     ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
@@ -83,63 +83,73 @@ test_rect = pygame.Rect(100,100,100,50) # test rectangle
 
 # ### Main game loop
 while True:
-    display.fill((146,244,255)) # background color
+    
+    display.fill((146, 244, 255))  # Background color
 
-    tile_rects = [] # list of all solid tiles
+    tile_rects = []  # List of all solid tiles
     y = 0
-    for row in game_map: # iterate through tile map
-        x = 0
-        for tile in row:
-            if tile == '1': # dirt tile
+    for row_index, row in enumerate(game_map):  # Iterate through tile map
+        x = 0  # Reset x for each row
+        for col_index, tile in enumerate(row):
+            if tile == '1':  # Dirt tile
                 display.blit(dirt_image, (x * TILE_SIZE, y * TILE_SIZE))
-            if tile == '2': # grass tile
+            if tile == '2':  # Grass tile
                 display.blit(grass_image, (x * TILE_SIZE, y * TILE_SIZE))
-            if tile != '0': # add solid tiles to list
+            if tile == '3':  # Wheat tile
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                # Check collision with wheat tile
+                wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                print(f"Player position: {player_rect.topleft}, Wheat position: {wheat_rect.topleft}")  # Debugging statement
+                if 250 <= player_rect.x <= 260:  # If player collides within the x range
+                    print(f"Collision with wheat tile at ({row_index}, {col_index})")  # Debugging statement
+                    game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space
+                    print(f"Updated game_map: {game_map}")  # Debugging statement
+            if tile != '0':  # Add solid tiles to list
                 tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-            x += 1
-        y += 1
-
-    # ### Handle player velocity and collisions
-    player_movement = [0, 0] # reset movement
+            x += 1  # Increment x after processing each tile
+        y += 1  # Increment y after processing each row
+    # Handle player velocity and collisions
+    player_movement = [0, 0]  # Reset movement
     if moving_right:
-        player_movement[0] += 2 # move right
+        player_movement[0] += 2  # Move right
     if moving_left:
-        player_movement[0] -= 2 # move left
-    player_movement[1] += player_y_momentum # apply gravity
-    player_y_momentum += 0.2 # increase momentum (fall speed)
-    if player_y_momentum > 3: # terminal velocity
+        player_movement[0] -= 2  # Move left
+    player_movement[1] += player_y_momentum  # Apply gravity
+    player_y_momentum += 0.2  # Increase momentum (fall speed)
+    if player_y_momentum > 3:  # Terminal velocity
         player_y_momentum = 3
 
     player_rect, collisions = move(player_rect, player_movement, tile_rects)
 
-    if collisions['bottom']: # landed on the ground
+    if collisions['bottom']:  # Landed on the ground
         player_y_momentum = 0
         air_timer = 0
     else:
         air_timer += 1
-    
-    display.blit(player_image, (player_rect.x, player_rect.y)) # draw player
 
-    # ### Event handling
+    display.blit(player_image, (player_rect.x, player_rect.y))  # Draw player
+
+    # Event handling
     for event in pygame.event.get():
-        if event.type == QUIT: # quit game
+        if event.type == QUIT:  # Quit game
             pygame.quit()
             sys.exit()
-        if event.type == KEYDOWN: # key press
+        if event.type == KEYDOWN:  # Key press
             if event.key == K_RIGHT:
                 moving_right = True
             if event.key == K_LEFT:
                 moving_left = True
-            if event.key == K_UP: # jump
-                if air_timer < 6: # prevent double jump
+            if event.key == K_UP:  # Jump
+                if air_timer < 6:  # Prevent double jump
                     player_y_momentum = -5
-        if event.type == KEYUP: # key release
+        if event.type == KEYUP:  # Key release
             if event.key == K_RIGHT:
                 moving_right = False
             if event.key == K_LEFT:
                 moving_left = False
-
-    surf = pygame.transform.scale(display, WINDOW_SIZE) # scale display surface
+    
+    # Scale display surface to window size
+    surf = pygame.transform.scale(display, WINDOW_SIZE)
     screen.blit(surf, (0, 0))
-    pygame.display.update() # update display
-    clock.tick(60) # maintain 60 fps
+    pygame.display.update()  # Update display
+    clock.tick(60)  # Maintain 60 FPS
