@@ -100,10 +100,14 @@ while True:
                 # Check collision with wheat tile
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                 print(f"Player position: {player_rect.topleft}, Wheat position: {wheat_rect.topleft}")  # Debugging statement
+
+
                 if 250 <= player_rect.x <= 260:  # If player collides within the x range
                     print(f"Collision with wheat tile at ({row_index}, {col_index})")  # Debugging statement
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space
                     print(f"Updated game_map: {game_map}")  # Debugging statement
+
+                    
             if tile != '0':  # Add solid tiles to list
                 tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
             x += 1  # Increment x after processing each tile
