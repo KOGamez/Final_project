@@ -1,5 +1,13 @@
-import pygame, sys # import pygame and sys
+import pygame, sys, time # import pygame and sys
 
+#sounds
+pygame.mixer.init()
+
+pygame.mixer.music.load('themesong.wav')
+
+
+pygame.mixer.music.play(loops=-1)
+pygame.mixer.music.set_volume(0.1)
 clock = pygame.time.Clock() # set up the clock
 
 from pygame.locals import * # import pygame modules
@@ -25,13 +33,13 @@ dirt_image = pygame.image.load('dirt_texture versio1-1.png (1).png') # load dirt
 Wheat_image = pygame.image.load('Wheat.png') # load dirt texture
 ### Tile map for game world layout
 game_map = [
-    ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','2','2','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2','2','2','2','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-    ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-    ['2','2','0','0','0','0','0','0','0','0','0','0','0','4','0','0','3','2','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2'],
+    ['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
+    ['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
+    ['1','0','0','0','0','0','0','0','5','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','8','7','0','0','0','0','0','0','1'],
+    ['1','0','0','0','0','0','0','2','2','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2','2','2','2','0','0','0','0','0','0','1'],
+    ['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
+    ['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
+    ['1','2','0','0','0','0','0','0','0','0','0','0','0','4','0','0','3','2','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','6','0','2','1'],
     ['1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1','1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1'],
     ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
     ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
@@ -100,13 +108,10 @@ while True:
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
                 # Check collision with wheat tile
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-                print(f"Player position: {player_rect.topleft}, Wheat position: {wheat_rect.topleft}")  # Debugging statement
-
-                if 176 <= player_rect.x <= 224 and player_rect.y > 61:  # If player collides within the x range
-                    print(f"Collision with wheat tile at ({row_index}, {col_index})")  # Debugging statement
-                    game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space
-                    print(f"Updated game_map: {game_map}")  # Debugging statement
+                
+                if 224 <= player_rect.x <= 270 and player_rect.y >= 60:  # If player collides within the x range
                     
+                    game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space                
             if tile == '4':  # Wheat tile
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
                 # Check collision with wheat tile
@@ -115,19 +120,58 @@ while True:
                 if 176 <= player_rect.x <= 224 and player_rect.y > 61:  # If player collides within the x range
                    
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space
+            if tile == '5':  # Wheat tile
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                # Check collision with wheat tile
+                wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+               
+                if 96 <= player_rect.x <= 144 and player_rect.y <= 12:  # If player collides within the x range
+                    pygame.mixer.music.play()
+                    game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space        
+            if tile == '6':  # Wheat tile
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                # Check collision with wheat tile
+                wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+               
+                if 512 <= player_rect.x <= 538 and player_rect.y >= 60:  # If player collides within the x range
                     
-
+                    game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space 
+            if tile == '7':  # Wheat tile
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                # Check collision with wheat tile
+                wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+               
+                if 448 <= player_rect.x <= 500 and player_rect.y <= 12:  # If player collides within the x range
+                   
+                    game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space     
+            if tile == '8':  # Wheat tile
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
+                # Check collision with wheat tile
+                wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                print(f"Player position: {player_rect.topleft}, Wheat position: {wheat_rect.topleft}")  # Debugging statement
+                if 430 <= player_rect.x <= 448 and player_rect.y <= 12:  # If player collides within the x range
+                    print(f"Collision with wheat tile at ({row_index}, {col_index})")  # Debugging statement
+                    game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space   
                     
             if tile != '0':  # Add solid tiles to list
                 tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
             x += 1  # Increment x after processing each tile
         y += 1  # Increment y after processing each row
+
+
+
+
     # Handle player velocity and collisions
     player_movement = [0, 0]  # Reset movement
     if moving_right:
         player_movement[0] += 2  # Move right
     if moving_left:
         player_movement[0] -= 2  # Move left
+        
     player_movement[1] += player_y_momentum  # Apply gravity
     player_y_momentum += 0.2  # Increase momentum (fall speed)
     if player_y_momentum > 3:  # Terminal velocity
