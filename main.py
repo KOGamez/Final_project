@@ -22,7 +22,7 @@ screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate screen
 display = pygame.Surface((600, 200)) # create a smaller surface for scaling
 
 # Load player image
-player_image = pygame.image.load('Player_standingv3-1.png.png')
+player_image = pygame.image.load('Player_standing-1.png (3).png')
 
 
 # Load environment assets
@@ -152,9 +152,9 @@ while True:
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
                 # Check collision with wheat tile
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-               
+                print(f"Player position: {player_rect.topleft}, Wheat position: {wheat_rect.topleft}")  # Debugging statement
                 if 430 <= player_rect.x <= 448 and player_rect.y <= 12:  # If player collides within the x range
-                    
+                    print(f"Collision with wheat tile at ({row_index}, {col_index})")  # Debugging statement
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space   
                     
             if tile != '0':  # Add solid tiles to list
