@@ -5,6 +5,15 @@ pygame.mixer.init()
 
 pygame.mixer.music.load('themesong.wav')
 
+wheat_colected = 0
+
+print("Welcome to the game")
+print("You are a farmer and you have to collect wheat")
+print("You can move left and right using the arrow keys")
+print("You can jump using the up arrow key")
+print("You have to collect all the wheat to win the game")
+print("Press any key to start the game")
+
 
 pygame.mixer.music.play(loops=-1)
 pygame.mixer.music.set_volume(0.1)
@@ -110,7 +119,8 @@ while True:
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                 
                 if 224 <= player_rect.x <= 270 and player_rect.y >= 60:  # If player collides within the x range
-                    
+                    wheat_colected += 1
+                    print("Wheat collected: ", wheat_colected)
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space                
             if tile == '4':  # Wheat tile
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
@@ -118,7 +128,8 @@ while True:
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
             
                 if 176 <= player_rect.x <= 224 and player_rect.y > 61:  # If player collides within the x range
-                   
+                    wheat_colected += 1
+                    print("Wheat collected: ", wheat_colected)
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space
             if tile == '5':  # Wheat tile
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
@@ -127,7 +138,9 @@ while True:
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                
                 if 96 <= player_rect.x <= 144 and player_rect.y <= 12:  # If player collides within the x range
-                    pygame.mixer.music.play()
+                    wheat_colected += 1
+                    print("Wheat collected: ", wheat_colected)
+                    
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space        
             if tile == '6':  # Wheat tile
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
@@ -136,7 +149,8 @@ while True:
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                
                 if 512 <= player_rect.x <= 538 and player_rect.y >= 60:  # If player collides within the x range
-                    
+                    wheat_colected += 1
+                    print("Wheat collected: ", wheat_colected)
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space 
             if tile == '7':  # Wheat tile
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
@@ -145,7 +159,8 @@ while True:
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                
                 if 448 <= player_rect.x <= 500 and player_rect.y <= 12:  # If player collides within the x range
-                   
+                    wheat_colected += 1
+                    print("Wheat collected: ", wheat_colected)
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space     
             if tile == '8':  # Wheat tile
                 display.blit(Wheat_image, (x * TILE_SIZE, y * TILE_SIZE))
@@ -154,7 +169,8 @@ while True:
                 wheat_rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                
                 if 430 <= player_rect.x <= 448 and player_rect.y <= 12:  # If player collides within the x range
-                    
+                    wheat_colected += 1
+                    print("Wheat collected: ", wheat_colected)
                     game_map[row_index][col_index] = '0'  # Replace wheat tile with empty space   
                     
             if tile != '0':  # Add solid tiles to list
